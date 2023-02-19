@@ -1,5 +1,7 @@
 # 0xtiago/qualysapi .gitignore file
 
+.DS_Store
+
 qualys.config
 log/
 xml/*
