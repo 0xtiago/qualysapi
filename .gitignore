@@ -6,3 +6,5 @@ xml/*
 !xml/email_sample.xml
 !xml/report_sample.xml
 !xml/scan_sample.xml
+
+node_modules

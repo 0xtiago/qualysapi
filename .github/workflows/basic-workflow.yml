@@ -1,0 +1,19 @@
+name: simple_node - Basic Build Action
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - examples/apps/simple_node/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: npm install
+      run: |
+        npm install
+    - name: build docker image
+      run: docker build -t basic-node-app .

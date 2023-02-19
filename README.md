@@ -4,3 +4,14 @@ This is a very simple script created years ago internally in my last job after t
 It keeps simple, but with some small improvements and made available to the community.
 
 `./qualysapi.sh | tee -a log/qualysapi.log` 
+
+
+
+
+
+# Github Actions
+
+## Secrets 
+
+
+
