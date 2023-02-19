@@ -17,5 +17,6 @@ jobs:
       run: |
         npm install
     - name: build docker image
+      working-directory: examples/apps/basic-node
       run: |
         docker build -t basic-node .
