@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: npm install
-      working-directory: xamples/apps/basic-node
+      working-directory: examples/apps/basic-node
       run: |
         npm install
     - name: build docker image
