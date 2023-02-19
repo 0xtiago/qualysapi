@@ -6,6 +6,12 @@ on:
       - main
     paths:
       - examples/apps/basic-node/**
+  pull_request:
+    branches: 
+      - main
+    paths:
+      - examples/apps/basic-node/**
+
 
 jobs:
   build:
