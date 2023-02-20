@@ -23,6 +23,7 @@ jobs:
         sudo apt install -y net-tools wget git curl p7zip-full ca-certificates qpdf ghostscript apt-transport-https software-properties-common pssh python3 python3-pip python-setuptools
     
     - name: Connecting remote web server and building OWASP Vulnerable Node Application
+      continue-on-error: true
       env:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
         SSH_USER: ${{ secrets.SSH_USER }}
@@ -31,6 +32,7 @@ jobs:
         sudo echo $SSH_KEY > /tmp/server.key
         sudo chmod 600 /tmp/server.key
         cat /tmp/server.key
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'date'
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat'
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
