@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v1
     - name: Setup Ubuntu Runner
       run: |
         apt install -y sshpass net-tools wget git curl p7zip-full ca-certificates qpdf ghostscript apt-transport-https software-properties-common
