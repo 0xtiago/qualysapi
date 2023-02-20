@@ -1,0 +1,54 @@
+name: OWASP Vulnerable Node Application - Build Action with QUALYS WAS API scan.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - examples/apps/vulnerable-node-app/**
+  pull_request:
+    branches: 
+      - main
+    paths:
+      - examples/apps/vulnerable-node-app/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup Ubuntu Runner
+      run: |
+        apt update
+        apt install -y sshpass net-tools wget git curl p7zip-full ca-certificates qpdf ghostscript apt-transport-https software-properties-common
+    
+    - name: Connecting remote web server and building OWASP Vulnerable Node Application
+      env:
+        SSH_USER=${{secrets.SSH_USER}}
+        SSH_PASS=${{secrets.SSH_PASS}}
+      run: |
+        sshpass -e ssh -o StrictHostKeyChecking=no $SSH_USERo@$SSH_SERVER rm -rf NodeGoat
+        sshpass -e ssh -o StrictHostKeyChecking=no $SSH_USERo@$SSH_SERVER git clone https://github.com/0xtiago/NodeGoat
+        cd NodeGoat
+        docker-compose build
+        docker-compose up -d
+    - name: Download qualysapi from Github and executing - Kudos to VIA team!
+      env: 
+        QUALYS_SCANNER_TYPE=${{vars.QUALYS_SCANNER_TYPE}}
+        QUALYS_URL=${{vars.QUALYS_URL}}
+        QUALYS_USER=${{secrets.QUALYS_USER}}
+        QUALYS_USER_PASS=${{secrets.QUALYS_USER_PASS}}
+        QUALYS_PROJECT_NAME=${{vars.QUALYS_PROJECT_NAME}}
+        QUALYS_WEBAPP_ID=${{vars.QUALYS_WEBAPP_ID}}
+        QUALYS_OPTION_PROFILE_ID='${{vars.QUALYS_OPTION_PROFILE_ID}}
+        QUALYS_SEND_REPORT=${{vars.QUALYS_SEND_REPORT}}
+        QUALYS_ENCRYPT_REPORT=${{vars.QUALYS_ENCRYPT_REPORT}}
+        QUALYS_ENCRYPT_PASS=${{secrets.QUALYS_ENCRYPT_PASS}}
+        QUALYS_REPORT_RECEIVERS=${{vars.QUALYS_REPORT_RECEIVERS}}
+      run: |
+        git clone https://github.com/0xtiago/qualysapi
+        cd qualysapi
+        ./qualysapi.sh | tee -a log/qualysapi.log
+
+
+
+  
