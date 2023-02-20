@@ -18,7 +18,8 @@ jobs:
     - uses: actions/checkout@v1
     - name: Setup Ubuntu Runner
       run: |
-        apt install -y sshpass net-tools wget git curl p7zip-full ca-certificates qpdf ghostscript apt-transport-https software-properties-common
+        sudo apt update
+        sudo apt install -y sshpass net-tools wget git curl p7zip-full ca-certificates qpdf ghostscript apt-transport-https software-properties-common
     
     - name: Connecting remote web server and building OWASP Vulnerable Node Application
       env:
@@ -47,6 +48,7 @@ jobs:
       run: |
         git clone https://github.com/0xtiago/qualysapi
         cd qualysapi
+        chmod +x qualysapi.sh 
         ./qualysapi.sh | tee -a log/qualysapi.log
 
 
