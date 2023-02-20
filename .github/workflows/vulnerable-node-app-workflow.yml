@@ -35,7 +35,10 @@ jobs:
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'date'
 
     - name: Download qualysapi from Github and executing - Kudos to VIA team!
-      env: 
+      env:
+        SSH_SERVER: ${{ secrets.SSH_SERVER }}
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSH_KEY: ${{ secrets.SSH_KEY }} 
         QUALYS_SCANNER_TYPE: ${{ vars.QUALYS_SCANNER_TYPE }}
         QUALYS_URL: ${{ vars.QUALYS_URL }}
         QUALYS_USER: ${{ secrets.QUALYS_USER }}
