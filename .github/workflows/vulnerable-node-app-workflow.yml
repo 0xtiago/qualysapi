@@ -27,10 +27,9 @@ jobs:
       #   SSH_USER: ${{secrets.SSH_SERVER}}
       #   SSHPASS: ${{secrets.SSHPASS}}
       run: |
-        sshpass -p "${{ secrets.SSHPASS }}" -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}"@"${{ secrets.SSH_SERVER }}" 'rm -rf NodeGoat'
-        sshpass -p "${{ secrets.SSHPASS }}" -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}"@"${{ secrets.SSH_SERVER }}" 'git clone https://github.com/0xtiago/NodeGoat'
-        sshpass -p "${{ secrets.SSHPASS }}"  -o StrictHostKeyChecking=no "${{ secrets.SSH_USER }}"@"${{ secrets.SSH_SERVER }}" 'cd NodeGoat && docker-compose build && docker-compose up -d'
-
+        sshpass -p ${{ secrets.SSHPASS }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'rm -rf NodeGoat'
+        sshpass -p ${{ secrets.SSHPASS }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'git clone https://github.com/0xtiago/NodeGoat'
+        sshpass -p ${{ secrets.SSHPASS }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'cd NodeGoat && docker-compose build && docker-compose up -d'
     - name: Download qualysapi from Github and executing - Kudos to VIA team!
       env: 
         QUALYS_SCANNER_TYPE: ${{ vars.QUALYS_SCANNER_TYPE }}
