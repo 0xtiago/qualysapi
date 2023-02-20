@@ -27,11 +27,12 @@ jobs:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
         SSH_USER: ${{ secrets.SSH_SERVER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
-        run: |
-          echo $SSH_KEY > server.key
-          pssh -i server.key -H $SSH_USER@$SSH_SERVER 'rm -rf NodeGoat'
-          pssh -i server.key -H $SSH_USER@$SSH_SERVER 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
-          pssh -i server.key -H $SSH_USER@$SSH_SERVER 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
+      run: |
+        echo $SSH_KEY > server.key
+        pssh -i server.key -H $SSH_USER@$SSH_SERVER 'rm -rf NodeGoat'
+        pssh -i server.key -H $SSH_USER@$SSH_SERVER 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
+        pssh -i server.key -H $SSH_USER@$SSH_SERVER 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
+
     - name: Download qualysapi from Github and executing - Kudos to VIA team!
       env: 
         QUALYS_SCANNER_TYPE: ${{ vars.QUALYS_SCANNER_TYPE }}
