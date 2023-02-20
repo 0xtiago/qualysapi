@@ -66,13 +66,22 @@ Find bellow the features already available and that we will develop in the futur
 
 1. Setup environment. Let's make sure everything will work properly.
    ```bash
-   # Update and install possible dependencies
+   # Update and install possible dependencies or tools to make your life easier
    sudo apt update
    
-   sudo apt install -y sudo net-tools wget git curl p7zip-full ca-certificates apt-transport-https software-properties-common pssh python3 python3-pip python-setuptools
+   sudo apt install -y sudo net-tools wget git curl p7zip-full ca-certificates apt-transport-https \
+   software-properties-common pssh python3 python3-pip python-setuptools vim nano timedatectl
+   
+   # Setup your timezone for logs and reports info with correct time.
+   # List all timezone and choose yours
+   timedatectl list-timezones
+   
+   #Setup chosen timezone
+   sudo timedatectl set-timezone America/Sao_Paulo
    ```
 
 2. Clone this repository
+
    `git clone https://github.com/0xtiago/qualysapi`
 
 3. Enter the repository and rename `qualys_sample.config` to `qualys.config`.
@@ -88,7 +97,7 @@ Find bellow the features already available and that we will develop in the futur
    
    QUALYS_SCANNER_TYPE='EXTERNAL'
    
-   QUALYS_URL='https://qualysapi.qg4.apps.qualys.com'
+   QUALYS_URL='https://qualysapi.qualys.com'
    QUALYS_USER='your Qualys user'  
    QUALYS_USER_PASS='your Qualys password'
    
@@ -109,7 +118,20 @@ Find bellow the features already available and that we will develop in the futur
    ./qualysapi.sh
    ```
 
-   
+5. Script launched Qualys scan execution and waiting for its finishing. 
+   ![image-20230220201319910](images/image-20230220201319910.png)
+
+   In Qualys WAS dashboard you can see the vulnerability scan running after API request.
+
+   ![image-20230220201113701](images/image-20230220201113701.png)
+
+   By the end of scanning, the output of the script will be like this, and triggering Qualys to send the report for the configured email.
+   ![image-20230220202120116](images/image-20230220202120116.png)
+   In Qualys platform, we can see the statys if Finished.
+
+   ![image-20230220201626304](images/image-20230220201626304.png)
+
+
 
 ### Running in Github Actions Runner
 
