@@ -47,6 +47,18 @@ jobs:
         git clone https://github.com/0xtiago/qualysapi
         cd qualysapi
         chmod +x qualysapi.sh 
+
+        echo $QUALYS_SCANNER_TYPE
+        echo $QUALYS_URL
+        echo $QUALYS_USER
+        echo $QUALYS_USER_PASS
+        echo $QUALYS_PROJECT_NAME
+        echo $QUALYS_WEBAPP_ID
+        echo $QUALYS_OPTION_PROFILE_ID
+        echo $QUALYS_SEND_REPORT
+        echo $QUALYS_ENCRYPT_REPORT
+        echo $QUALYS_ENCRYPT_PASS
+        echo $QUALYS_REPORT_RECEIVERS
         ./qualysapi.sh | tee -a log/qualysapi.log
 
 
