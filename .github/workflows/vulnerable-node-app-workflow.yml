@@ -30,9 +30,9 @@ jobs:
       run: |
         sudo echo $SSH_KEY > /tmp/server.key
         sudo chmod 600 /tmp/server.key
-        parallel-ssh -H $SSH_USER@$SSH_SERVER -x "-i /tmp/server.key"  'rm -rf NodeGoat'
-        parallel-ssh -H $SSH_USER@$SSH_SERVER -x "-i /tmp/server.key" 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
-        parallel-ssh -H $SSH_USER@$SSH_SERVER -x "-i /tmp/server.key" 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i .ssh/id_rsa -o StrictHostKeyChecking=no" 'rm -rf NodeGoat'
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i .ssh/id_rsa -o StrictHostKeyChecking=no" 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i .ssh/id_rsa -o StrictHostKeyChecking=no" 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
 
     - name: Download qualysapi from Github and executing - Kudos to VIA team!
       env: 
