@@ -10,10 +10,19 @@ fi
 . qualys.config
 
 
-if [ $QUALYS_LAUNCH_MODE=1 ]; then  
+if [[ $QUALYS_LAUNCH_MODE == 1 ]]; then  
 	echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Variaveis de ambiente e credenciais obtidas de qualys.conf local."  
+fi
+if [[ $QUALYS_LAUNCH_MODE == 2 ]]; then  
+		echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Using Github Secrets."
+		if [ ! -z "$QUALYS_USER_PASS" ] || [! -z "$QUALYS_WEBAPP_ID" ]; then
+			echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Found Github secrets and variables set up."
+		else
+			echo "$(date "+%Y-%m-%d %H:%M:%S") | Github neither secrets nor variables present. Verify your Github secrets setup."
+			exit
+		fi	
 else
-	echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Abortando. Arquivo qualys.config não presente."
+	echo "$(date "+%Y-%m-%d %H:%M:%S") | No environment setup was found. Check our README at https://github.com/0xtiago/qualysapi."
 	exit
 fi
 
@@ -76,7 +85,6 @@ SCAN_STATUS=`cat $PWD/log/scanStatusCheck.log | sed -n 's:.*<status>\(.*\)</stat
 
 		while [ "$SCAN_STATUS" != "FINISHED" ] 
 		do
-		
 			echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Que pena. O scan $QUALYS_SCAN_ID está com status $SCAN_STATUS, portanto temos que aguardar. Daqui a $WAIT_SCAN segundos verifico novamente! ;-)"
 
 			sleep $WAIT_SCAN
@@ -84,19 +92,18 @@ SCAN_STATUS=`cat $PWD/log/scanStatusCheck.log | sed -n 's:.*<status>\(.*\)</stat
 			curl -u ""$QUALYS_USER:$QUALYS_USER_PASS"" "$QUALYS_URL/qps/rest/3.0/status/was/wasscan/$QUALYS_SCAN_ID" -o $PWD/log/scanStatusCheck.log > /dev/null 2>&1
 
 			SCAN_STATUS=`cat $PWD/log/scanStatusCheck.log | sed -n 's:.*<status>\(.*\)</status>.*:\1:p'`
-
 		done
 
 		# Cria XML para conefeccão do relatório
-		echo "$(date "+%Y-%m-%d %H:%M:%S") | $NOME_PROJETO | O scan $QUALYS_SCAN_ID finalizou, estou desenhando o relatório."
+		echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | O scan $QUALYS_SCAN_ID finalizou, estou desenhando o relatório."
 		cat <<EOF > $PWD/xml/wasreport.xml
 		<ServiceRequest>
 		   <data>
 		      <Report>
-			 <name>$NOME_PROJETO $QUALYS_SCAN_ID $TIME_SCAN</name>
-			 <description>$NOME_PROJETO $QUALYS_SCAN_ID $TIME_SCAN</description>
+			 <name>$QUALYS_PROJECT_NAME $QUALYS_SCAN_ID $TIME_SCAN</name>
+			 <description>$QUALYS_PROJECT_NAME $QUALYS_SCAN_ID $TIME_SCAN</description>
 			 <format>PDF_ENCRYPTED</format>
-			 <password>$REPORT_PASS</password>
+			 <password>$QUALYS_REPORT_PASS</password>
 			 <type>WAS_SCAN_REPORT</type>
 			 <config>
 			    <scanReport>
