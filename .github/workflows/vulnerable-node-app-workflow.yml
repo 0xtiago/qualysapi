@@ -27,7 +27,7 @@ jobs:
           SSH_SERVER: ${{ secrets.SSH_SERVER }}
           SSH_USER: ${{ secrets.SSH_SERVER }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
-      run: |
+        run: |
           echo $SSH_KEY > server.key
           pssh -i server.key -H $SSH_USER@$SSH_SERVER 'rm -rf NodeGoat'
           pssh -i server.key -H $SSH_USER@$SSH_SERVER 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
