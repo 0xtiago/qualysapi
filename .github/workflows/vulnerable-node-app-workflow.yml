@@ -29,8 +29,8 @@ jobs:
         SSHPASS: ${{ secrets.SSHPASS }}
       run: |
         sudo sshpass -p ${{ secrets.SSHPASS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'rm -rf NodeGoat'
-        sudo sshpass -p ${{ secrets.SSHPASS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'git clone https://github.com/0xtiago/NodeGoat && cd NodeGoat && docker-compose build && docker-compose up -d'
-        # sudo sshpass -p ${{ secrets.SSHPASS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'cd NodeGoat && docker-compose build && docker-compose up -d'
+        sudo sshpass -p ${{ secrets.SSHPASS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'git clone https://github.com/0xtiago/NodeGoat && sleep 60 && cd NodeGoat && docker-compose build && docker-compose up -d'
+  # sudo sshpass -p ${{ secrets.SSHPASS }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'cd NodeGoat && docker-compose build && docker-compose up -d'
     - name: Download qualysapi from Github and executing - Kudos to VIA team!
       env: 
         QUALYS_SCANNER_TYPE: ${{ vars.QUALYS_SCANNER_TYPE }}
