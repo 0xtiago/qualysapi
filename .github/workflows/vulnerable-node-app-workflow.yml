@@ -27,9 +27,9 @@ jobs:
         SSH_USER: ${{secrets.SSH_USER}}
         SSHPASS: ${{secrets.SSH_PASS}}
       run: |
-        sshpass -e ssh -o StrictHostKeyChecking=no $SSH_USERo@$SSH_SERVER 'rm -rf NodeGoat'
-        sshpass -e ssh -o StrictHostKeyChecking=no $SSH_USERo@$SSH_SERVER 'git clone https://github.com/0xtiago/NodeGoat'
-        sshpass -e ssh -o StrictHostKeyChecking=no $SSH_USERo@$SSH_SERVER 'cd NodeGoat && docker-compose build && docker-compose up -d'
+        sshpass -e ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER 'rm -rf NodeGoat'
+        sshpass -e ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER 'git clone https://github.com/0xtiago/NodeGoat'
+        sshpass -e ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER 'cd NodeGoat && docker-compose build && docker-compose up -d'
 
     - name: Download qualysapi from Github and executing - Kudos to VIA team!
       env: 

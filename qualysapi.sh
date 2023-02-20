@@ -184,7 +184,7 @@ echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Chamando API de envi
 
 curl -s -u ""$QUALYS_USER:$QUALYS_USER_PASS"" -H "content-type: text/xml" -X "POST" --data-binary @- "$QUALYS_URL/qps/rest/3.0/send/was/report/$QUALYS_REPORT_ID" -o log/wasemail.log < $PWD/xml/wasEmail.xml
 
-echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Relatório $QUALYS_REPORT_ID foi enviado para os seguintes e-mails: $(cat $PWD/xml/wasEmail.xml | grep -E -o "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b") ."
+echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Relatório $QUALYS_REPORT_ID foi enviado para os seguintes e-mails: $(cat $PWD/xml/wasEmail.xml | grep -E -o '\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b') ."
 echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Good luck, dude!"
 
 }
