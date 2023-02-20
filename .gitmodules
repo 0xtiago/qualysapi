@@ -1,3 +1,0 @@
-[submodule "examples/apps/vulnerable-node-app"]
-	path = examples/apps/vulnerable-node-app
-	url = https://github.com/0xtiago/NodeGoat
