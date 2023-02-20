@@ -20,7 +20,7 @@ jobs:
     - name: Setup Ubuntu Runner
       run: |
         sudo apt update
-        sudo apt install -y sshpass pssh net-tools wget git curl p7zip-full ca-certificates qpdf ghostscript apt-transport-https software-properties-common
+        sudo apt install -y net-tools wget git curl p7zip-full ca-certificates qpdf ghostscript apt-transport-https software-properties-common pssh python3 python3-pip python-setuptools
     
     - name: Connecting remote web server and building OWASP Vulnerable Node Application
       env:
@@ -29,9 +29,9 @@ jobs:
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
         echo $SSH_KEY > server.key
-        pssh -i server.key -H $SSH_USER@$SSH_SERVER 'rm -rf NodeGoat'
-        pssh -i server.key -H $SSH_USER@$SSH_SERVER 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
-        pssh -i server.key -H $SSH_USER@$SSH_SERVER 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
+        parallel-ssh -i server.key -H $SSH_USER@$SSH_SERVER 'rm -rf NodeGoat'
+        parallel-ssh -i server.key -H $SSH_USER@$SSH_SERVER 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
+        parallel-ssh -i server.key -H $SSH_USER@$SSH_SERVER 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
 
     - name: Download qualysapi from Github and executing - Kudos to VIA team!
       env: 
