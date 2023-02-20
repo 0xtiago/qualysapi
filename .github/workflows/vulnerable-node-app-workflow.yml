@@ -25,13 +25,13 @@ jobs:
     - name: Connecting remote web server and building OWASP Vulnerable Node Application
       env:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
-        SSH_USER: ${{ secrets.SSH_SERVER }}
+        SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
-        echo $SSH_KEY > server.key
-        parallel-ssh -i server.key -h $SSH_USER@$SSH_SERVER 'rm -rf NodeGoat'
-        parallel-ssh -i server.key -h $SSH_USER@$SSH_SERVER 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
-        parallel-ssh -i server.key -h $SSH_USER@$SSH_SERVER 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
+        echo $SSH_KEY > /tmp/server.key
+        parallel-ssh -i /tmp/server.key -H $SSH_USER@$SSH_SERVER 'rm -rf NodeGoat'
+        parallel-ssh -i /tmp/server.key -H $SSH_USER@$SSH_SERVER 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
+        parallel-ssh -i /tmp/server.key -H $SSH_USER@$SSH_SERVER 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
 
     - name: Download qualysapi from Github and executing - Kudos to VIA team!
       env: 
