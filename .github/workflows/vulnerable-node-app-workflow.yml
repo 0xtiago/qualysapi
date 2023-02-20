@@ -33,9 +33,6 @@ jobs:
         sudo chmod 600 /tmp/server.key
         cat /tmp/server.key
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'date'
-        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat'
-        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
-        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
 
     - name: Download qualysapi from Github and executing - Kudos to VIA team!
       env: 
@@ -51,6 +48,10 @@ jobs:
         QUALYS_ENCRYPT_PASS: ${{ secrets.QUALYS_ENCRYPT_PASS }}
         QUALYS_REPORT_RECEIVERS: ${{ vars.QUALYS_REPORT_RECEIVERS }}
       run: |
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat'
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
+
         git clone https://github.com/0xtiago/qualysapi
         cd qualysapi
         chmod +x qualysapi.sh 
