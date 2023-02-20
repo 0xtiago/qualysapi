@@ -23,9 +23,9 @@ jobs:
     
     - name: Connecting remote web server and building OWASP Vulnerable Node Application
       env:
-        SSH_SERVER: ${{secrets.SSH_SERVER}}
-        SSH_USER: ${{secrets.SSH_USER}}
-        SSHPASS: ${{secrets.SSH_PASS}}
+        SSH_SERVER: ${{ secrets.SSH_SERVER }}
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSHPASS: ${{ secrets.SSHPASS }}
       run: |
         sshpass -e ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER 'rm -rf NodeGoat'
         sshpass -e ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER 'git clone https://github.com/0xtiago/NodeGoat'
