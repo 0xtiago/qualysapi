@@ -33,7 +33,7 @@ jobs:
     - name: Download qualysapi from Github and executing - Kudos to VIA team!
       env: 
         QUALYS_SCANNER_TYPE: ${{ vars.QUALYS_SCANNER_TYPE }}
-        QUALYS_URL: ${{ env.QUALYS_URL }}
+        QUALYS_URL: ${{ vars.QUALYS_URL }}
         QUALYS_USER: ${{ secrets.QUALYS_USER }}
         QUALYS_USER_PASS: ${{ secrets.QUALYS_USER_PASS }}
         QUALYS_PROJECT_NAME: ${{ vars.QUALYS_PROJECT_NAME }}
