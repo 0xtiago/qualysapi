@@ -28,6 +28,7 @@ jobs:
         SSH_USER: ${{ secrets.SSH_SERVER }}
         SSHPASS: ${{ secrets.SSHPASS }}
       run: |
+        export SSHPASS='${{ secrets.SSHPASS }}'
         sudo sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'rm -rf NodeGoat'
         sudo sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'git clone https://github.com/0xtiago/NodeGoat'
         sudo sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'cd NodeGoat && docker-compose build && docker-compose up -d'
