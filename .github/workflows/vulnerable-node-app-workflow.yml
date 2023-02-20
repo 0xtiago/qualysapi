@@ -28,10 +28,11 @@ jobs:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
-        echo $SSH_KEY > /tmp/server.key
-        parallel-ssh -i /tmp/server.key -H $SSH_USER@$SSH_SERVER 'rm -rf NodeGoat'
-        parallel-ssh -i /tmp/server.key -H $SSH_USER@$SSH_SERVER 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
-        parallel-ssh -i /tmp/server.key -H $SSH_USER@$SSH_SERVER 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
+        sudo echo $SSH_KEY > /tmp/server.key
+        sudo chmod 600 /tmp/server.key
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i /tmp/server.key 'rm -rf NodeGoat'
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i /tmp/server.key 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i /tmp/server.key 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
 
     - name: Download qualysapi from Github and executing - Kudos to VIA team!
       env: 
