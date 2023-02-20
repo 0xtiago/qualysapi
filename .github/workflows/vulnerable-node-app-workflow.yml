@@ -1,4 +1,4 @@
-name: OWASP Vulnerable Node Application - Build Action with QUALYS WAS API scan.
+name: OWASP Vulnerable Node Application - Action workflow for QUALYS WAS API.
 on:
   push:
     branches:
@@ -29,19 +29,22 @@ jobs:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
+        echo "Fixing SSH private key format and configuring it."
         echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/server.key
         echo $SSH_KEY | base64 -w0 | base64 --decode | tr " " "\n" | tail -n +5 | head -n-4 >> /tmp/server.key
         echo "-----END OPENSSH PRIVATE KEY-----" >> /tmp/server.key
         sudo chmod 600 /tmp/server.key
         cat /tmp/server.key
-        
+
+        echo "Testing connection calling date command."
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'date'
+        echo "Deploying and buildin vulnerable Node application."
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat'
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'git clone https://github.com/0xtiago/NodeGoat ; sleep 30'
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
+        echo "Built and available at port 4000/tcp."
 
-
-    - name: Download qualysapi from Github and executing - Kudos to VIA team!
+    - name: Configuring qualysapi script and lauching web vulnerability scan. Time to have a coffee, it will take a little long ☕. 
       env:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
         SSH_USER: ${{ secrets.SSH_USER }}
