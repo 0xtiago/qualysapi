@@ -21,6 +21,7 @@ jobs:
     - name: npm install
       working-directory: examples/apps/basic-node
       run: |
+        echo "$RUNNER_OS"
         npm install
     - name: build docker image
       working-directory: examples/apps/basic-node

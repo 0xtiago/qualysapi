@@ -1,34 +1,15 @@
 #!/bin/bash
+# QUALYS_LAUNCH_MODE
+## 1 - Get secrets and variables from this file
+## 2 - Get secrets and variables from Github Environments configuration
+## 3 - Get secrets and variables from Delinea DevOps Secrets Vault
+QUALYS_LAUNCH_MODE=2
 
-# Check existence of qualys.config
-if [[ ! -f qualys.config ]] ; then
-    echo 'File "qualys.config" is not there. Rename the file "qualys_sample.config" and configure it. Aborting.'
-    exit
-fi
-
-# Importing local configs
-. qualys.config
-
-
-if [[ $QUALYS_LAUNCH_MODE == 1 ]]; then  
-	echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Variaveis de ambiente e credenciais obtidas de qualys.conf local."  
-fi
-if [[ $QUALYS_LAUNCH_MODE == 2 ]]; then  
-		echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Using Github Secrets."
-		if [ ! -z "$QUALYS_USER_PASS" ] || [! -z "$QUALYS_WEBAPP_ID" ]; then
-			echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Found Github secrets and variables set up."
-		else
-			echo "$(date "+%Y-%m-%d %H:%M:%S") | Github neither secrets nor variables present. Verify your Github secrets setup."
-			exit
-		fi	
-else
-	echo "$(date "+%Y-%m-%d %H:%M:%S") | No environment setup was found. Check our README at https://github.com/0xtiago/qualysapi."
-	exit
-fi
+QUALYS_CONFIG_FILE=qualys.config
 
 #Confs de espera
 WAIT_SCAN=120
-WAIT_REPORT=120
+WAIT_REPORT=30
 
 #Formato da Data
 DATE_FORMAT="$(date "+%Y-%m-%d %H:%M:%S")"
@@ -36,6 +17,63 @@ DATE_FORMAT="$(date "+%Y-%m-%d %H:%M:%S")"
 #Criando pastas locais caso não existam
 mkdir -p $PWD/xml
 mkdir -p $PWD/log
+
+
+
+case "$QUALYS_LAUNCH_MODE" in 
+	1) echo "$(date "+%Y-%m-%d %H:%M:%S") | Using local qualys.config file."
+		# Check existence of qualys.config
+		if [[ -f "$QUALYS_CONFIG_FILE" ]] ; then
+			#Importing config file
+			. $QUALYS_CONFIG_FILE
+			
+		else
+			echo 'Aborting. File "qualys.config" is not there. Rename the file "qualys_sample.config" to "qualys.config" or setup QUALYS_CONFIG_FILE variable. '
+    		exit
+		fi
+		;;
+
+	2)	echo "$(date "+%Y-%m-%d %H:%M:%S") | Using Github Secrets."
+		if [ ! -z "$QUALYS_USER_PASS" ] || [ ! -z "$QUALYS_WEBAPP_ID" ]; then
+			
+			echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Found Github secrets and variables set up."
+		else
+			echo "$(date "+%Y-%m-%d %H:%M:%S") | Github neither secrets nor variables present. Verify your Github secrets setup."
+			exit
+		fi
+		;;
+	*)	echo "$(date "+%Y-%m-%d %H:%M:%S") | No environment setup was found. Check our README at https://github.com/0xtiago/qualysapi."
+		exit
+		;;
+esac
+
+
+
+# if [[ $QUALYS_LAUNCH_MODE == 1 ]]; then  
+# 	echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Using local qualys.config file."
+# 	# Check existence of qualys.config
+# 	if [[ -f "$QUALYS_CONFIG_FILE" ]] ; then
+# 		#Importing config file
+# 		. $QUALYS_CONFIG_FILE
+# 	else
+# 		echo 'Aborting. File "qualys.config" is not there. Rename the file "qualys_sample.config" to "qualys.config" or setup QUALYS_CONFIG_FILE variable. '
+#     	exit
+# 	fi
+# fi
+# if [[ $QUALYS_LAUNCH_MODE == 2 ]]; then  
+# 		echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Using Github Secrets."
+# 		if [ ! -z "$QUALYS_USER_PASS" ] || [! -z "$QUALYS_WEBAPP_ID" ]; then
+# 			echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Found Github secrets and variables set up."
+# 		else
+# 			echo "$(date "+%Y-%m-%d %H:%M:%S") | Github neither secrets nor variables present. Verify your Github secrets setup."
+# 			exit
+# 		fi	
+# else
+# 	echo "$(date "+%Y-%m-%d %H:%M:%S") | No environment setup was found. Check our README at https://github.com/0xtiago/qualysapi."
+# 	exit
+# fi
+
+
 
 # # # F I M   D O   S E T U P # # # 
 
@@ -189,7 +227,7 @@ echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | O relatório $QUALYS
 				<Report>
 				<distributionList>
 				<add>
-				<EmailAddress><![CDATA[eklzjdhi@sharklasers.com]]></EmailAddress>
+				<EmailAddress><![CDATA[$QUALYS_REPORT_RECEIVERS]]></EmailAddress>
 				</add>
 				</distributionList>
 				</Report>
@@ -203,6 +241,5 @@ echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Chamando API de envi
 
 curl -s -u ""$QUALYS_USER:$QUALYS_USER_PASS"" -H "content-type: text/xml" -X "POST" --data-binary @- "$QUALYS_URL/qps/rest/3.0/send/was/report/$QUALYS_REPORT_ID" -o log/wasemail.log < $PWD/xml/wasEmail.xml
 
-echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Relatório $QUALYS_REPORT_ID foi enviado para os seguintes e-mails: $(cat $PWD/xml/wasEmail.xml | grep -E -o "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b" | tr "\n" ", ")."
+echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Relatório $QUALYS_REPORT_ID foi enviado para os seguintes e-mails: $(cat $PWD/xml/wasEmail.xml | grep -E -o "\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}\b") ."
 echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Good luck, dude!"
-#FIM
