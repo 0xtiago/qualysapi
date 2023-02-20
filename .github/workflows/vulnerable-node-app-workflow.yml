@@ -30,6 +30,7 @@ jobs:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
+        echo "Configuring my personal VPS."
         echo "Fixing SSH private key format and configuring it."
         echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/server.key
         echo $SSH_KEY | base64 -w0 | base64 --decode | tr " " "\n" | tail -n +5 | head -n-4 >> /tmp/server.key
@@ -70,19 +71,7 @@ jobs:
         
         git clone https://github.com/0xtiago/qualysapi
         cd qualysapi
-        chmod +x qualysapi.sh 
-
-        echo $QUALYS_SCANNER_TYPE
-        echo $QUALYS_URL
-        echo $QUALYS_USER
-        echo $QUALYS_USER_PASS
-        echo $QUALYS_PROJECT_NAME
-        echo $QUALYS_WEBAPP_ID
-        echo $QUALYS_OPTION_PROFILE_ID
-        echo $QUALYS_SEND_REPORT
-        echo $QUALYS_ENCRYPT_REPORT
-        echo $QUALYS_ENCRYPT_PASS
-        echo $QUALYS_REPORT_RECEIVERS
+        chmod +x qualysapi.sh
         ./qualysapi.sh | tee -a log/qualysapi.log
 
 
