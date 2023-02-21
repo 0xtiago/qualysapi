@@ -158,6 +158,12 @@ Just follow the instructions availaibe at your Qualys WAS dashboard or [Qualys W
 
 
 
+```
+od -An -N1 -i /dev/random > examples/apps/vulnerable-node-app/trigger.txt
+```
+
+
+
 
 
 # References

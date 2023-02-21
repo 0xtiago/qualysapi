@@ -1,4 +1,4 @@
-name: OWASP Vulnerable Node Application - Action workflow for QUALYS WAS API.
+name: OWASP Vulnerable Node Application - Action workflow examplefor QUALYS WAS API.
 on:
   push:
     branches:
@@ -23,15 +23,14 @@ jobs:
         sudo apt install -y sudo net-tools wget git curl p7zip-full ca-certificates apt-transport-https software-properties-common pssh python3 python3-pip python-setuptools
         sudo timedatectl set-timezone America/Sao_Paulo
     
-    - name: Connecting remote web server and building OWASP Vulnerable Node Application
+    - name: Setup web server (Cloud VPS).
       continue-on-error: true
       env:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
-        echo "Configuring my personal VPS."
-        echo "Fixing SSH private key format and configuring it."
+        echo "Deploying SSH Key"
         echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/server.key
         echo $SSH_KEY | base64 -w0 | base64 --decode | tr " " "\n" | tail -n +5 | head -n-4 >> /tmp/server.key
         echo "-----END OPENSSH PRIVATE KEY-----" >> /tmp/server.key
@@ -68,12 +67,21 @@ jobs:
         QUALYS_ENCRYPT_PASS: ${{ secrets.QUALYS_ENCRYPT_PASS }}
         QUALYS_REPORT_RECEIVERS: ${{ vars.QUALYS_REPORT_RECEIVERS }}
       run: |
-        
         git clone https://github.com/0xtiago/qualysapi
         cd qualysapi
         chmod +x qualysapi.sh
         ./qualysapi.sh | tee -a log/qualysapi.log
-
+    
+    - name: Cleaning server server (Cloud VPS).
+      continue-on-error: true
+      env:
+        SSH_SERVER: ${{ secrets.SSH_SERVER }}
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSH_KEY: ${{ secrets.SSH_KEY }}
+      run: |
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker kill $(docker ps -q)'
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
+        echo "Done. Good bye!"
 
 
   
