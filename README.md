@@ -150,7 +150,7 @@ Just follow the instructions availaibe at your Qualys WAS dashboard or [Qualys W
 
    ![image-20230220201626304](images/image-20230220201626304.png)
    All the e-mails receivers in the list will get an e-mail like this with the link to download the encrypted PDF.
-   ![image-20230221105631081](images/image-20230221105631081.png)
+   ![image-20230221203145783](images/image-20230221203145783.png)
 
 
 
