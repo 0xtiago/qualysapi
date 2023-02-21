@@ -4,6 +4,19 @@
 
 ![Qualys_ShellScriptAPIAuto_Logo](images/Qualys_ShellScriptAPIAuto_Logo.png)
 
+# Table of contents
+- [Qualys Cloud Platform API Automation - Shell Script](#qualys-cloud-platform-api-automation---shell-script)
+- [Table of contents](#table-of-contents)
+- [Introduction](#introduction)
+- [Notice of Non-Affiliation and Disclaimer](#notice-of-non-affiliation-and-disclaimer)
+- [Features](#features)
+- [Configuration](#configuration)
+  - [Configure you Application in Qualys Cloud Platform](#configure-you-application-in-qualys-cloud-platform)
+  - [Choose your environment](#choose-your-environment)
+    - [Running  Locally](#running--locally)
+    - [Running in Github Actions Runners](#running-in-github-actions-runners)
+- [References](#references)
+
 # Introduction
 
 This is a very simple shell script tool created years ago internally in my last job after the advent of digital transformation era (Agile and DevOps in Brazil 🇧🇷.  This is now available after start conducting new tests for my current employer.
