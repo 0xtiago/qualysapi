@@ -14,7 +14,7 @@
 
 # Introduction
 
-This is a very simple shell script tool created years ago internally in my last job after the advent of digital transformation era (Agile and DevOps in Brazil 🇧🇷.  This is now available after start conducting new tests for my current employer.
+This is a very simple shell script tool created years ago internally in my last job after the advent of digital transformation era (Agile and DevOps) in Brazil 🇧🇷.  This is now available after start conducting new tests for my current employer.
 
 I don't aim to make things more complex, the goal is to make everything functional and easy to use in daily basis. I woud love to receive your help for bug fixes and improments. ☺️
 
