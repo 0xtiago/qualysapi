@@ -137,6 +137,6 @@ Find bellow the features already available and that we will develop in the futur
 
 
 
-Support this cause. =P
+Support this cause.
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/tiagotavares)
