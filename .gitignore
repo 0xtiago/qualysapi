@@ -9,4 +9,5 @@ xml/*
 !xml/report_sample.xml
 !xml/scan_sample.xml
 
+playground
 node_modules
