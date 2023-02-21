@@ -15,42 +15,42 @@ I don't aim to make things more complex, the goal is to make everything function
 
 Find bellow the features already available and that we will develop in the future.
 
+- **Application Security**
+  - [x] Qualys Web Application Scanning
 
 
-## Application Security
-
-- [x] Qualys Web Application Scanning
-
+- **Infrastructure Security**
+  - [ ] *Qualys VMDR (In the future)*
 
 
-## Infrastructure Security
+- **CI/DC**
 
-- [ ] *Qualys VMDR (In the future)*
+  - [x] Github Actions (Native)
 
-
-
-## CI/DC
-
-- [x] Github Actions
-- [ ] CI/CD gate support
+  - [ ] CI/CD gate support
 
 
+- **Other**
 
-## Other
+  - [x] Build reports through Qualys API
 
-- [x] Build reports through Qualys API
-- [x] Send reports through Qualys API
-- [ ] Dockerfile
-- [ ] Push vulnerabilies to DefectDojo
-- [ ] Messaging
-  - [ ] Microsoft Teams
-  - [ ] Slack
-  - [ ] E-mail
-- [x] Secrets
-  - [x] Github Secrets
-  - [ ] Delinea DevOps Secrets Vault
-  - [ ] Azure Key Vault
-  
+  - [x] Send reports through Qualys API
+
+  - [ ] Dockerfile
+
+  - [ ] Push vulnerabilies to DefectDojo
+    - [ ] Messaging
+      - [ ] Microsoft Teams
+      - [ ] Slack
+      - [ ] E-mail
+
+
+  - [x] Secrets
+    - [x] Github Secrets
+      - [ ] Delinea DevOps Secrets Vault
+      - [ ] Azure Key Vault
+    
+
 
 
 
@@ -58,9 +58,9 @@ Find bellow the features already available and that we will develop in the futur
 
 ⚠️ All steps bellow were tested in Ubuntu 20.04 and 22.04.  
 
-## Step 1 - Configure you Application in Qualys Cloud Platform
+## Configure you Application in Qualys Cloud Platform
 
-## Step 2 - Configure and run script
+## Choose your environment
 
 ### Running  Locally
 
@@ -127,19 +127,13 @@ Find bellow the features already available and that we will develop in the futur
 
    By the end of scanning, the output of the script will be like this, and triggering Qualys to send the report for the configured email.
    ![image-20230220202120116](images/image-20230220202120116.png)
-   In Qualys platform, we can see the statys if Finished.
+   In Qualys platform, we can also see its status.
 
    ![image-20230220201626304](images/image-20230220201626304.png)
 
 
 
-### Running in Github Actions Runner
-
-
-
-
-
-
+### Running in Github Actions Runners
 
 
 
