@@ -52,6 +52,10 @@ Find bellow the features already available and that we will develop in the futur
     
 
 
+# References
+
+- [Qualys Web Application Scanning API Documentation](https://www.qualys.com/docs/qualys-was-api-user-guide.pdf)
+
 
 
 # Configuration
