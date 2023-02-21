@@ -29,7 +29,7 @@ jobs:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
-        APP_URL: ${{ secrets.SSH_KEY }}
+        APP_URL: ${{ secrets.APP_URL }}
       run: |
         echo "Deploying SSH Key"
         echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/server.key
