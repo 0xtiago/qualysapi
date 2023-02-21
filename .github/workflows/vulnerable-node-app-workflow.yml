@@ -41,7 +41,7 @@ jobs:
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'date'
 
         echo "Stop and cleaning last build."
-        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker kill $(docker ps -q)'
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -aq | xargs docker stop | xargs docker rm'
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
 
         echo "Deploying and buildin vulnerable Node application."
@@ -79,7 +79,7 @@ jobs:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
-        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker kill $(docker ps -q)'
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -aq | xargs docker stop | xargs docker rm'
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
         echo "Done. Good bye!"
 
