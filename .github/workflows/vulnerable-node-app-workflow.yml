@@ -43,8 +43,9 @@ jobs:
         echo "Listing running containers."
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -q | tee /tmp/running_containers.txt'
         
-        echo "Killing each container."
+        echo "Killing each container and wiping everything."
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do docker kill "$line" ; done < /tmp/running_containers.txt'
+        parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
 
         echo "Deploying and building vulnerable Node application."
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat'
