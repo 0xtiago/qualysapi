@@ -1,11 +1,7 @@
 
-
-# Qualys Cloud Platform API Automation - Shell Script
-
 ![Qualys_ShellScriptAPIAuto_Logo](images/Qualys_ShellScriptAPIAuto_Logo.png)
 
 # Table of contents
-- [Qualys Cloud Platform API Automation - Shell Script](#qualys-cloud-platform-api-automation---shell-script)
 - [Table of contents](#table-of-contents)
 - [Introduction](#introduction)
 - [Notice of Non-Affiliation and Disclaimer](#notice-of-non-affiliation-and-disclaimer)
