@@ -73,11 +73,11 @@ Find bellow the features already available and that we will develop in the futur
 
 # Configuration
 
-## Configure you Application in Qualys Cloud Platform
+## 1) Configure you Application in Qualys Cloud Platform
 
 Just follow the instructions availaibe at your Qualys WAS dashboard or [Qualys WAS Getting Started Guide](https://www.qualys.com/docs/qualys-was-getting-started-guide.pdf) and start your scans with the configurations you need. After that you'll have all information needed for the following steps.
 
-## Choose your environment
+## 2) Choose your environment
 
 ⚠️ All steps bellow were tested in **Ubuntu 20.04/22.04**.  
 
