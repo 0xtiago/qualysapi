@@ -53,19 +53,17 @@ Find bellow the features already available and that we will develop in the futur
     
 
 
-# References
-
-- [Qualys Web Application Scanning API Documentation](https://www.qualys.com/docs/qualys-was-api-user-guide.pdf)
-
 
 
 # Configuration
 
-⚠️ All steps bellow were tested in Ubuntu 20.04 and 22.04.  
-
 ## Configure you Application in Qualys Cloud Platform
 
+Just follow the instructions availaibe at your Qualys WAS dashboard or [Qualys WAS Getting Started Guide](https://www.qualys.com/docs/qualys-was-getting-started-guide.pdf) and start your scans with the configurations you need. After that you'll have all information needed for the following steps.
+
 ## Choose your environment
+
+⚠️ All steps bellow were tested in **Ubuntu 20.04/22.04**.  
 
 ### Running  Locally
 
@@ -131,7 +129,7 @@ Find bellow the features already available and that we will develop in the futur
    ![image-20230220201113701](images/image-20230220201113701.png)
 
    By the end of scanning, the output of the script will be like this, and triggering Qualys to send the report for the configured email.
-   ![image-20230220202120116](images/image-20230220202120116.png)
+   ![image-20230221115118898](images/image-20230221115118898.png)
    In Qualys platform, we can also see its status.
 
    ![image-20230220201626304](images/image-20230220201626304.png)
@@ -141,6 +139,15 @@ Find bellow the features already available and that we will develop in the futur
 
 
 ### Running in Github Actions Runners
+
+
+
+# References
+
+- [Qualys Web Application Scanning API Documentation](https://www.qualys.com/docs/qualys-was-api-user-guide.pdf)
+- [Qualys WAS Getting Started Guide](https://www.qualys.com/docs/qualys-was-getting-started-guide.pdf)
+
+
 
 
 
