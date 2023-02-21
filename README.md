@@ -134,6 +134,8 @@ Find bellow the features already available and that we will develop in the futur
    In Qualys platform, we can also see its status.
 
    ![image-20230220201626304](images/image-20230220201626304.png)
+   All the e-mails receivers in the list will get an e-mail like this with the link to download the encrypted PDF.
+   ![image-20230221105631081](images/image-20230221105631081.png)
 
 
 

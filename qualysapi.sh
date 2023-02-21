@@ -170,7 +170,7 @@ echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | O relatório $QUALYS
 				<Report>
 				<distributionList>
 				<add>
-				<EmailAddress><![CDATA[ $QUALYS_REPORT_RECEIVERS ]]></EmailAddress>
+				<EmailAddress><![CDATA[$QUALYS_REPORT_RECEIVERS]]></EmailAddress>
 				</add>
 				</distributionList>
 				</Report>
