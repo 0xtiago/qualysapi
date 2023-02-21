@@ -1,8 +1,7 @@
 
 ![Qualys_ShellScriptAPIAuto_Logo](images/Qualys_ShellScriptAPIAuto_Logo.png)
 
-# Table of contents
-- [Table of contents](#table-of-contents)
+
 - [Introduction](#introduction)
 - [Notice of Non-Affiliation and Disclaimer](#notice-of-non-affiliation-and-disclaimer)
 - [Features](#features)
