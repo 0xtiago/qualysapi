@@ -12,6 +12,14 @@ I don't aim to make things more complex, the goal is to make everything function
 
 
 
+# Notice of Non-Affiliation and Disclaimer
+
+We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with  Qualys, Inc., or any of its subsidiaries or its affiliates. The official Qualy website can be found at www.qualys.com. 
+
+Qualys and the Qualys logo are registered trademarks of Qualys, Inc. All other trademarks are the property of their respective owners.
+
+
+
 # Features
 
 Find bellow the features already available and that we will develop in the future.
