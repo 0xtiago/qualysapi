@@ -21,7 +21,6 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y sudo net-tools wget git curl p7zip-full ca-certificates apt-transport-https software-properties-common pssh python3 python3-pip python-setuptools
-        sudo timedatectl set-timezone America/Sao_Paulo
     
     - name: 🚀 Setup web server (Cloud VPS).
       continue-on-error: true
