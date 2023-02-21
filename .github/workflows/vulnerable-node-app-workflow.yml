@@ -1,4 +1,4 @@
-name: OWASP Vulnerable Node Application - Action workflow examplefor QUALYS WAS API.
+name: 🐞 OWASP Vulnerable Node Application - Action workflow examplefor QUALYS WAS API.
 on:
   push:
     branches:
@@ -17,13 +17,13 @@ jobs:
     environment: Qualys
     steps:
     - uses: actions/checkout@v3
-    - name: Setup Ubuntu Runner
+    - name: 🚀 Setup Ubuntu 22.04 Runner
       run: |
         sudo apt update
         sudo apt install -y sudo net-tools wget git curl p7zip-full ca-certificates apt-transport-https software-properties-common pssh python3 python3-pip python-setuptools
         sudo timedatectl set-timezone America/Sao_Paulo
     
-    - name: Setup web server (Cloud VPS).
+    - name: 🚀 Setup web server (Cloud VPS).
       continue-on-error: true
       env:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
@@ -50,7 +50,7 @@ jobs:
         parallel-ssh -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'cd NodeGoat ; docker-compose build && docker-compose up -d ; sleep 30'
         echo "Built and available at port 4000/tcp."
 
-    - name: Configuring qualysapi script and lauching web vulnerability scan. Time to have a coffee, it will take a little long ☕. 
+    - name: ☕ Configuring Qualys API script and lauching web vulnerability scan. Time to have a coffee, it will take some time. 
       env:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
         SSH_USER: ${{ secrets.SSH_USER }}
@@ -72,7 +72,7 @@ jobs:
         chmod +x qualysapi.sh
         ./qualysapi.sh | tee -a log/qualysapi.log
     
-    - name: Cleaning server server (Cloud VPS).
+    - name: 🧹 Cleaning web server (Cloud VPS).
       continue-on-error: true
       env:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
