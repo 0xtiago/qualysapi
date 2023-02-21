@@ -1,7 +1,8 @@
+
+
 # Qualys Cloud Platform API Automation - Shell Script
 
-
-
+![Qualys_ShellScriptAPIAuto_Logo](images/Qualys_ShellScriptAPIAuto_Logo.png)
 
 # Introduction
 

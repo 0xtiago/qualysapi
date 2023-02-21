@@ -163,6 +163,7 @@ QUALYS_REPORT_STATUS=`cat $PWD/log/lastReportStatus.log | sed -n 's:.*<status>\(
 
 echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | O relatório $QUALYS_REPORT_ID está pronto! Estou enviando neste momento por e-mail! =)"
 
+EMAIL_LIST_XML_FORMAT=$(echo $QUALYS_REPORT_RECEIVERS | grep -E -o "\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+.[a-zA-Z0-9.-]+\b" | sed 's/^/<EmailAddress><![CDATA[/' | sed 's/$/]]><\/EmailAddress>/')
 				#Cria XML com informações de envio. DEVE-SE PREENCHER A LISTA DE TODOS OS EMAIL A SEREM ENVIADOS
 				cat <<EOF > $PWD/xml/wasEmail.xml
 				<ServiceRequest>
@@ -170,7 +171,7 @@ echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | O relatório $QUALYS
 				<Report>
 				<distributionList>
 				<add>
-				<EmailAddress><![CDATA[$QUALYS_REPORT_RECEIVERS]]></EmailAddress>
+				$(echo $EMAIL_LIST_XML_FORMAT)
 				</add>
 				</distributionList>
 				</Report>
