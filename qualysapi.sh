@@ -16,7 +16,7 @@ DATE_FORMAT="$(date "+%Y-%m-%d %H:%M:%S")"
 #Criando pastas locais e arquivos caso não existam
 mkdir -p $PWD/xml
 mkdir -p $PWD/log
-touch $PWD/log/qualysapi.log
+touch $PWD/log/qualysapi.log 
 
 
 
