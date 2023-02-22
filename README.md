@@ -64,8 +64,8 @@ Find bellow the features already available and that we will develop in the futur
 
   - [x] Secrets
     - [x] Github Secrets
-      - [ ] Delinea DevOps Secrets Vault
-      - [ ] Azure Key Vault
+    - [ ] Delinea DevOps Secrets Vault
+    - [ ] Azure Key Vault
     
 
 
