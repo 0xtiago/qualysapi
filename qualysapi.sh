@@ -16,7 +16,7 @@ DATE_FORMAT="$(date "+%Y-%m-%d %H:%M:%S")"
 #Criando pastas locais e arquivos caso não existam
 mkdir -p $PWD/xml
 mkdir -p $PWD/log
-touch $PWD/log/qualysapi.log 
+touch $PWD/log/qualysapi.log
 
 
 
@@ -229,6 +229,3 @@ case "$GITHUB_ACTIONS" in
 		;;
 esac
 # # # F I M   D O   S E T U P # # # 
-
-
-
