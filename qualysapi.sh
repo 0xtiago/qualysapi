@@ -13,9 +13,10 @@ WAIT_REPORT=30
 #Formato da Data
 DATE_FORMAT="$(date "+%Y-%m-%d %H:%M:%S")"
 
-#Criando pastas locais caso não existam
+#Criando pastas locais e arquivos caso não existam
 mkdir -p $PWD/xml
 mkdir -p $PWD/log
+touch $PWD/log/qualysapi.log
 
 
 

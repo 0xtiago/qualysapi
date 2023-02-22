@@ -67,7 +67,7 @@ jobs:
         git clone https://github.com/0xtiago/qualysapi
         
 
-    - name: 🔥 Lauching web vulnerability scan. Coffee time! ☕ 
+    - name: 🔥 Starting web vulnerability scan. Coffee time! ☕ 
       env:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
         SSH_USER: ${{ secrets.SSH_USER }}
