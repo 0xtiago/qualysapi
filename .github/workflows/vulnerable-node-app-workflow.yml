@@ -86,6 +86,7 @@ jobs:
       run: |
         cd qualysapi
         chmod +x qualysapi.sh
+        touch log/qualysapi.log
         ./qualysapi.sh | tee -a log/qualysapi.log
     
     - name: 🧹 Cleaning web server (Cloud VPS).
