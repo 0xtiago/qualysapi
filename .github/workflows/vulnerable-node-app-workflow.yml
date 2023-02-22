@@ -63,7 +63,6 @@ jobs:
         echo "Built and available at port 4000/tcp."
 
     - name: 🔥 Downloading and configuring Qualys API script.
-      env:
       run: |
         git clone https://github.com/0xtiago/qualysapi
         
@@ -90,7 +89,6 @@ jobs:
         ./qualysapi.sh | tee -a log/qualysapi.log
     
     - name: 🧹 Cleaning web server (Cloud VPS).
-      continue-on-error: true
       env:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
         SSH_USER: ${{ secrets.SSH_USER }}
