@@ -17,19 +17,18 @@ jobs:
     environment: Qualys
     steps:
     - uses: actions/checkout@v3
-    - name: 🚀 Setup Ubuntu 22.04 Runner
+    - name: ⚙️ Setup Ubuntu 22.04 Runner
       run: |
         sudo apt update
         sudo apt install -y sudo net-tools wget git curl p7zip-full ca-certificates apt-transport-https software-properties-common \
           pssh python3 python3-pip python-setuptools
     
-    - name: 🚀 Setup web server (Cloud VPS).
+    - name: ⚙️ Cleaning and preparing VPS server.
       #continue-on-error: true
       env:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
-        APP_URL: ${{ secrets.APP_URL }}
       run: |
         echo "Deploying SSH Key"
         echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/server.key
@@ -38,19 +37,42 @@ jobs:
         sudo chmod 600 /tmp/server.key
         cat /tmp/server.key
 
-        echo "Testing connection calling date command."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'date'
-
-        echo "Stop and cleaning last build."
-        echo "Listing running containers."
+        echo "🐳 Listing running containers."
         parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -q | \
-          tee /tmp/running_containers.txt'
-        
-        echo "Killing each container and wiping everything."
+          tee /tmp/running_containers.txt'        
+        echo "🐳 Killing all running containers."
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
           docker kill "$line" ; done < /tmp/running_containers.txt'
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
 
+        
+        echo "🐳 Removing all docker containers."
+        echo "Listing running containers."
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -a -q | \
+          tee /tmp/docker_containers.txt'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
+          docker rm "$line" ; done < /tmp/docker_containers.txt'
+        
+        echo "🐳 Removing all docker images."
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker images -a -q | \
+          tee /tmp/docker_images.txt'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
+          docker rmi "$line" ; done < /tmp/docker_images.txt'
+       
+        echo "🐳 Pruning everything."
+        docker kill "$line" ; done < /tmp/running_containers.txt'
+          parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
+    
+    
+    
+    
+    - name: 🚀 Deploying application.
+      #continue-on-error: true
+      env:
+        SSH_SERVER: ${{ secrets.SSH_SERVER }}
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSH_KEY: ${{ secrets.SSH_KEY }}
+        APP_URL: ${{ secrets.APP_URL }}
+      run: |
         echo "Deploying and building vulnerable Node application."
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat; sleep 5'
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" \
@@ -95,15 +117,31 @@ jobs:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
+        echo "🐳 Listing running containers."
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -q | \
+          tee /tmp/running_containers.txt'        
+        echo "🐳 Killing all running containers."
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
+          docker kill "$line" ; done < /tmp/running_containers.txt'
+
+        echo "🐳 Removing all docker containers."
         echo "Listing running containers."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -q | \
-          tee /tmp/running_containers.txt'
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -a -q | \
+          tee /tmp/docker_containers.txt'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
+          docker rm "$line" ; done < /tmp/docker_containers.txt'
+        
+        echo "🐳 Removing all docker images."
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker images -a -q | \
+          tee /tmp/docker_images.txt'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
+          docker rmi "$line" ; done < /tmp/docker_images.txt'
+       
+        echo "🐳 Pruning everything."
+        docker kill "$line" ; done < /tmp/running_containers.txt'
+          parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
 
-        echo "Killing each container."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; \
-          do docker kill "$line" ; done < /tmp/running_containers.txt'
-
-        echo "Wiping everything."
+        echo "🧹 Wiping everything."
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat'
         echo "Done. Good bye!"
