@@ -1,4 +1,4 @@
-name: 🐞 OWASP Vulnerable Node Application - Action workflow example for QUALYS WAS API.
+name: 🐞 OWASP Vulnerable Node Application - Action workflow example for Qualys WAS API.
 on:
   push:
     branches:
