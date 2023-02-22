@@ -156,6 +156,8 @@ Just follow the instructions availaibe at your Qualys WAS dashboard or [Qualys W
 
 ### Running in Github Actions Runners
 
+Atenção, runner permanece ativo por 360 minutos (6 horas), entao é necessario ajustar no QUalys o tempo maximo de scan.
+
 
 
 ```
