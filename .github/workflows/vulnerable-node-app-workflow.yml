@@ -59,8 +59,7 @@ jobs:
           docker rmi "$line" ; done < /tmp/docker_images.txt'
        
         echo "🐳 Pruning everything."
-        docker kill "$line" ; done < /tmp/running_containers.txt'
-          parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
     
     
     
@@ -138,8 +137,7 @@ jobs:
           docker rmi "$line" ; done < /tmp/docker_images.txt'
        
         echo "🐳 Pruning everything."
-        docker kill "$line" ; done < /tmp/running_containers.txt'
-          parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
 
         echo "🧹 Wiping everything."
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
