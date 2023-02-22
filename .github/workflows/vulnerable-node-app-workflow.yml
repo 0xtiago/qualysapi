@@ -48,19 +48,19 @@ jobs:
         
         echo "Killing each container and wiping everything."
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
-          docker kill "$line" ; done < /tmp/running_containers.txt'
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
+          sudo docker kill "$line" ; done < /tmp/running_containers.txt'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'sudo docker system prune -a -f'
 
         echo "Deploying and building vulnerable Node application."
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat; sleep 5'
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" \
           'git clone https://github.com/0xtiago/NodeGoat 2>&1; sleep 15'
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'cd NodeGoat ; \
-          docker-compose build  && docker-compose up -d ; sleep 60'
+          sudo docker-compose build  && sudo docker-compose up -d ; sleep 60'
        
         echo -e "Waiting for the application deployment..." ; spin='-\|/' && i=0 && until curl http://$APP_URL --connect-timeout 3 2>/dev/null ; \
           do i=$(( (i+1) %4 )) ;  printf "\r${spin:$i:1}" sleep .1 ; done ;echo -e "\n\nApplication ready for scanning!"
-        echo "Built and available at port 4000/tcp."
+        echo "Built and available at port 80/tcp."
 
     - name: 🔥 Downloading and configuring Qualys API script.
       run: |
@@ -95,14 +95,14 @@ jobs:
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
         echo "Listing running containers."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -q | \
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'sudo docker ps -q | \
           tee /tmp/running_containers.txt'
 
         echo "Killing each container."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; \
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'sudo while read -r line; \
           do docker kill "$line" ; done < /tmp/running_containers.txt'
 
         echo "Wiping everything."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'sudo docker system prune -a -f'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'sudo rm -rf NodeGoat'
         echo "Done. Good bye!"
