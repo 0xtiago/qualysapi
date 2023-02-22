@@ -62,7 +62,13 @@ jobs:
           do i=$(( (i+1) %4 )) ;  printf "\r${spin:$i:1}" sleep .1 ; done ;echo -e "\n\nApplication ready for scanning!"
         echo "Built and available at port 4000/tcp."
 
-    - name: ☕ Configuring Qualys API script and lauching web vulnerability scan. Time to have a coffee, it will take some time. 
+    - name: 🔥 Downloading and configuring Qualys API script.
+      env:
+      run: |
+        git clone https://github.com/0xtiago/qualysapi
+        
+
+    - name: 🔥 Lauching web vulnerability scan. Coffee time! ☕ 
       env:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
         SSH_USER: ${{ secrets.SSH_USER }}
@@ -79,7 +85,6 @@ jobs:
         QUALYS_ENCRYPT_PASS: ${{ secrets.QUALYS_ENCRYPT_PASS }}
         QUALYS_REPORT_RECEIVERS: ${{ vars.QUALYS_REPORT_RECEIVERS }}
       run: |
-        git clone https://github.com/0xtiago/qualysapi
         cd qualysapi
         chmod +x qualysapi.sh
         ./qualysapi.sh | tee -a log/qualysapi.log
