@@ -77,7 +77,9 @@ jobs:
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" \
           'git clone https://github.com/0xtiago/NodeGoat 2>&1; sleep 15'
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'cd NodeGoat ; \
-         docker-compose build  && docker-compose up -d ; sleep 60'
+         docker-compose build ;\
+         docker images | awk '{ print $3,$1}' | egrep -v "IMAGE|bkimminich/juice-shop" | while read id image ; do trivy image $id --severity CRITICAL,HIGH 2>/dev/null | grep "Total: " | awk '{if($2>0) print "Imagem vulneravel"}' | uniq ; done > /tmp/container &&\
+         grep vulneravel /tmp/container && docker-compose up -d ; sleep 60'
        
         echo -e "Waiting for the application deployment..." ; spin='-\|/' && i=0 && until curl http://$APP_URL --connect-timeout 3 2>/dev/null ; \
           do i=$(( (i+1) %4 )) ;  printf "\r${spin:$i:1}" sleep .1 ; done ;echo -e "\n\nApplication ready for scanning!"
