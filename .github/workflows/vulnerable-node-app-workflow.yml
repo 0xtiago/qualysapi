@@ -70,7 +70,7 @@ jobs:
         SSH_SERVER: ${{ secrets.SSH_SERVER }}
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
-        APP_URL: ${{ secrets.APP_URL }}
+        APP_URL: ${{ vars.APP_URL }}
       run: |
         echo "Deploying and building vulnerable Node application."
         parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat; sleep 5'
