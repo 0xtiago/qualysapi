@@ -30,36 +30,40 @@ jobs:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
+        TIME_FILES="$(date "+%Y-%m-%d %H:%M:%S")"
+        echo "🐳 Creating temp directory"
+        sudo mkdir -p /tmp/qualysapi
         echo "Deploying SSH Key"
-        echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/server.key
-        echo $SSH_KEY | base64 -w0 | base64 --decode | tr " " "\n" | tail -n +5 | head -n-4 >> /tmp/server.key
-        echo "-----END OPENSSH PRIVATE KEY-----" >> /tmp/server.key
-        sudo chmod 600 /tmp/server.key
-        cat /tmp/server.key
+        echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/qualysapi/server.key
+        echo $SSH_KEY | base64 -w0 | base64 --decode | tr " " "\n" | tail -n +5 | head -n-4 >> /tmp/qualysapi/server.key
+        echo "-----END OPENSSH PRIVATE KEY-----" >> /tmp/qualysapi/server.key
+        sudo chmod 600 /tmp/qualysapi/server.key
+        #cat /tmp/qualysapi/server.key
 
+        
         echo "🐳 Listing running containers."
-        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -q | \
-          tee /tmp/running_containers.txt'        
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'docker ps -q | \
+          tee /tmp/qualysapi/running_containers_$TIME_FILES.txt'        
         echo "🐳 Killing all running containers."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
-          docker kill "$line" ; done < /tmp/running_containers.txt'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
+          docker kill "$line" ; done < /tmp/qualysapi/running_containers_$TIME_FILES.txt'
 
         
         echo "🐳 Removing all docker containers."
         echo "Listing running containers."
-        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -a -q | \
-          tee /tmp/docker_containers.txt'
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
-          docker rm "$line" ; done < /tmp/docker_containers.txt'
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'docker ps -a -q | \
+          tee /tmp/qualysapi/docker_containers_$TIME_FILES.txt'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
+          docker rm "$line" ; done < /tmp/qualysapi/docker_containers_$TIME_FILES.txt'
         
         echo "🐳 Removing all docker images."
-        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker images -a -q | \
-          tee /tmp/docker_images.txt'
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
-          docker rmi "$line" ; done < /tmp/docker_images.txt'
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'docker images -a -q | \
+          tee /tmp/qualysapi/docker_images_$TIME_FILES.txt'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
+          docker rmi "$line" ; done < /tmp/qualysapi/docker_images_$TIME_FILES.txt'
        
-        echo "🐳 Pruning everything."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
+        #echo "🐳 Pruning everything."
+        #parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
     
     
     
@@ -73,10 +77,10 @@ jobs:
         APP_URL: ${{ vars.APP_URL }}
       run: |
         echo "Deploying and building vulnerable Node application."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat; sleep 5'
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" \
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat; sleep 5'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" \
           'git clone https://github.com/0xtiago/NodeGoat 2>&1; sleep 15'
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'cd NodeGoat ; \
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'cd NodeGoat ; \
          docker-compose build  && docker-compose up -d ; sleep 60'
        
         echo -e "Waiting for the application deployment..." ; spin='-\|/' && i=0 && until curl http://$APP_URL --connect-timeout 3 2>/dev/null ; \
@@ -117,30 +121,34 @@ jobs:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
+
+        TIME_FILES="$(date "+%Y-%m-%d %H:%M:%S")"
+
         echo "🐳 Listing running containers."
-        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -q | \
-          tee /tmp/running_containers.txt'        
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'docker ps -q | \
+          tee /tmp/qualysapi/running_containers_$TIME_FILES.txt'        
         echo "🐳 Killing all running containers."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
-          docker kill "$line" ; done < /tmp/running_containers.txt'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
+          docker kill "$line" ; done < /tmp/qualysapi/running_containers_$TIME_FILES.txt'
 
         echo "🐳 Removing all docker containers."
         echo "Listing running containers."
-        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker ps -a -q | \
-          tee /tmp/docker_containers.txt'
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
-          docker rm "$line" ; done < /tmp/docker_containers.txt'
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'docker ps -a -q | \
+          tee /tmp/qualysapi/docker_containers_$TIME_FILES.txt'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
+          docker rm "$line" ; done < /tmp/qualysapi/docker_containers_$TIME_FILES.txt'
         
         echo "🐳 Removing all docker images."
-        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker images -a -q | \
-          tee /tmp/docker_images.txt'
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
-          docker rmi "$line" ; done < /tmp/docker_images.txt'
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'docker images -a -q | \
+          tee /tmp/qualysapi/docker_images_$TIME_FILES.txt'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'while read -r line; do \
+          docker rmi "$line" ; done < /tmp/qualysapi/docker_images_$TIME_FILES.txt'
        
-        echo "🐳 Pruning everything."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
+        #echo "🐳 Pruning everything."
+        #parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
 
         echo "🧹 Wiping everything."
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
-        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat'
+        #parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'docker system prune -a -f'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'rm -rf NodeGoat'
+        parallel-ssh -t 300 -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi/server.key -o StrictHostKeyChecking=no" 'rm -rf /tmp/qualysapi/'
         echo "Done. Good bye!"
