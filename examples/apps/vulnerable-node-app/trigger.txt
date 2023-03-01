@@ -1,2 +1,6 @@
+<<<<<<< HEAD
                       117                                                
+=======
+                      107                                                
+>>>>>>> parent of 59d9cbd (Closes #35,  Rewrite docker cleaning steps.)
 
