@@ -30,9 +30,9 @@ jobs:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
-        TIME_FILES="$(date "+%Y-%m-%d %H:%M:%S")"
+        export TIME_FILES="$(date "+%Y-%m-%d %H:%M:%S")"
         echo "🐳 Creating temp directory"
-        sudo mkdir -p /tmp/qualysapi
+        mkdir -p /tmp/qualysapi
         echo "Deploying SSH Key"
         echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/qualysapi/server.key
         echo $SSH_KEY | base64 -w0 | base64 --decode | tr " " "\n" | tail -n +5 | head -n-4 >> /tmp/qualysapi/server.key
