@@ -136,6 +136,7 @@ curl -s -u ""$QUALYS_USER:$QUALYS_USER_PASS"" -H "content-type: text/xml" -X "PO
 
 #Guarda o ID de request do último relatório
 QUALYS_REPORT_ID=`cat $PWD/log/lastReportRequest.log | sed -n 's:.*<id>\(.*\)</id>.*:\1:p'`
+#TODO: Corrigir report
 
 echo "$(date "+%Y-%m-%d %H:%M:%S") | $QUALYS_PROJECT_NAME | Solicitado relatório do scan $QUALYS_SCAN_ID. O ID do relatório é $QUALYS_REPORT_ID. Daqui a $WAIT_REPORT segundos verifico o status."
 
