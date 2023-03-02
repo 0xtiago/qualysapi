@@ -30,9 +30,8 @@ jobs:
         SSH_USER: ${{ secrets.SSH_USER }}
         SSH_KEY: ${{ secrets.SSH_KEY }}
       run: |
-        echo "🐳 Creating temp directory"
-        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi_runner/server.key -o StrictHostKeyChecking=no" 'mkdir -p /tmp/qualysapi_docker/'
-      
+        
+        mkdir -p /tmp/qualysapi_runner/
         echo "Deploying SSH Key"
         echo "-----BEGIN OPENSSH PRIVATE KEY-----" > /tmp/qualysapi_runner/server.key
         echo $SSH_KEY | base64 -w0 | base64 --decode | tr " " "\n" | tail -n +5 | head -n-4 >> /tmp/qualysapi_runner/server.key
@@ -41,6 +40,8 @@ jobs:
         #cat /tmp/qualysapi_runner/server.key
 
         
+        echo "🐳 Creating temp directory"
+        parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi_runner/server.key -o StrictHostKeyChecking=no" 'mkdir -p /tmp/qualysapi_docker/'
         echo "🐳 Listing running containers."
         parallel-ssh -t 300  -H $SSH_USER@$SSH_SERVER -i -x "-i /tmp/qualysapi_runner/server.key -o StrictHostKeyChecking=no" 'docker ps -q | \
           tee /tmp/qualysapi_docker/running_containers.txt'        
