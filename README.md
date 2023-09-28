@@ -160,10 +160,6 @@ Atenção, runner permanece ativo por 360 minutos (6 horas), entao é necessario
 
 
 
-```
-od -An -N1 -i /dev/random > examples/apps/vulnerable-node-app/trigger.txt
-```
-
 
 
 
@@ -172,6 +168,10 @@ od -An -N1 -i /dev/random > examples/apps/vulnerable-node-app/trigger.txt
 
 - [Qualys Web Application Scanning API Documentation](https://www.qualys.com/docs/qualys-was-api-user-guide.pdf)
 - [Qualys WAS Getting Started Guide](https://www.qualys.com/docs/qualys-was-getting-started-guide.pdf)
+
+```
+od -An -N1 -i /dev/random > examples/apps/vulnerable-node-app/trigger.txt
+```
 
 
 
