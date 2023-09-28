@@ -89,7 +89,7 @@ Just follow the instructions availaibe at your Qualys WAS dashboard or [Qualys W
    sudo apt update
    
    sudo apt install -y sudo net-tools wget git curl p7zip-full ca-certificates apt-transport-https \
-   software-properties-common pssh python3 python3-pip python-setuptools vim nano timedatectl
+   software-properties-common pssh python3 python3-pip python-setuptools vim nano
    
    # Setup your timezone for logs and reports info with correct time.
    # List all timezone and choose yours
